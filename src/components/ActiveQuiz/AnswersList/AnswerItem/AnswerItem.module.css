@@ -10,3 +10,11 @@
   background: rgba(255, 255, 255, .2);
   transition: background .3s ease-in-out;
 }
+
+.success {
+  background-color: green;
+}
+
+.error {
+  background-color: red;
+}
