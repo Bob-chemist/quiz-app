@@ -17,8 +17,8 @@ class Drawer extends Component {
 
   render() {
     const cls = [classes.Drawer];
-    if (!this.props.isOpen) {
-      cls.push(classes.close)
+    if (this.props.isOpen) {
+      cls.push(classes.open)
     }
 
     return (

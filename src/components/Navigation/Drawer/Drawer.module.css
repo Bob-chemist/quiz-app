@@ -1,6 +1,6 @@
 .Drawer {
   position: fixed;
-  left: 0;
+  left: -300px;
   top: 0;
   bottom: 0;
   width: 80%;
@@ -13,8 +13,8 @@
   z-index: 90;
 }
 
-.close {
-  transform: translateX(-300px);  
+.open {
+  transform: translateX(300px);  
 }
 
 .Drawer ul {
