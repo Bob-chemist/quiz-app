@@ -34,7 +34,8 @@ export default class Auth extends Component {
           minLength: 6,
         }
       },
-    }
+    },
+    isFormValid: false,
   }
 
   loginHandler = () => {
@@ -78,7 +79,14 @@ export default class Auth extends Component {
 
     formControls[controlName] = control;
 
-    this.setState({formControls});
+    let isFormValid = true;
+    Object.keys(formControls).forEach((name) => {
+      isFormValid = formControls[name].valid && isFormValid;
+    })
+    this.setState({
+      formControls,
+      isFormValid,
+    });
   }
 
   renderInputs() {
@@ -112,6 +120,7 @@ export default class Auth extends Component {
             <Button 
               type="success"
               onClick={this.loginHandler}
+              disabled={!this.state.isFormValid}
             >
               Login
             </Button>
