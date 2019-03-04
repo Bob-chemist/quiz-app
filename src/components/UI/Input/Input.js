@@ -22,10 +22,11 @@ export default function Input(props) {
         id={htmlFor}
         value={props.value}
         onChange={props.onChange}
+        autoComplete={props.autocomplete}
       />
 
       {
-        isInvalid(props) ? <span>{props.errorMessage} || "Enter proper values"</span>
+        isInvalid(props) ? <span>{props.errorMessage || "Enter proper values"}</span>
         : null
       }      
     </div>
