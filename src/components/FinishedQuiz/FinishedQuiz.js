@@ -13,8 +13,7 @@ const FinishedQuiz = props => {
   return (
     <div className={classes.FinishedQuiz}>
       <ul>
-        {props.quiz.map((quizItem, index) => {
-					console.log('TCL: quizItem', quizItem)
+        {props.quiz.map((quizItem, index) => {				
           const cls = [
             'fa',
             props.results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
