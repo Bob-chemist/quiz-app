@@ -73,6 +73,10 @@ class Quiz extends Component {
     })
   } 
 
+  onChooseNewHandler = () => {
+    
+  }
+
   async componentDidMount() {
     try {
       const response = await axios.get(`quizes/${this.props.match.params.id}.json`);
@@ -104,6 +108,7 @@ class Quiz extends Component {
                         results={this.state.results}
                         quiz={this.state.quiz}
                         onRetry={this.onRetryHandler}
+                        onChooseNew={this.onChooseNewHandler}
                       />
                     :  <ActiveQuiz 
                         question={this.state.quiz[this.state.activeQuestion].question}

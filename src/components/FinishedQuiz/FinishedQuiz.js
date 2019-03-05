@@ -39,7 +39,7 @@ const FinishedQuiz = props => {
         </Button>
 
         <Button
-          onClick={props.onRetry}
+          onClick={props.onChooseNew}
           type='success'
         >
           choose new quiz
