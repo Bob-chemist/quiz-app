@@ -1,6 +1,5 @@
-import React from 'react'
-import classes from './Loader.module.css'
-
+import React from 'react';
+import classes from './Loader.module.css';
 
 const Loader = props => {
   return (
@@ -10,7 +9,7 @@ const Loader = props => {
       <div />
       <div />
     </div>
-  )
-}
+  );
+};
 
-export default Loader
+export default Loader;

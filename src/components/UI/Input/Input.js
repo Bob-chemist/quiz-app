@@ -1,8 +1,8 @@
-import React from 'react'
-import classes from './Input.module.sass'
+import React from 'react';
+import classes from './Input.module.sass';
 
-function isInvalid({valid, touched, shouldValidate}) {
-  return !valid && shouldValidate && touched
+function isInvalid({ valid, touched, shouldValidate }) {
+  return !valid && shouldValidate && touched;
 }
 
 export default function Input(props) {
@@ -11,13 +11,13 @@ export default function Input(props) {
   const htmlFor = `${inputType}-${Math.random()}`;
 
   if (isInvalid(props)) {
-    cls.push(classes.invalid)
+    cls.push(classes.invalid);
   }
 
   return (
     <div className={cls.join(' ')}>
       <label htmlFor={htmlFor}>{props.label}</label>
-      <input 
+      <input
         type={inputType}
         id={htmlFor}
         value={props.value}
@@ -25,10 +25,9 @@ export default function Input(props) {
         autoComplete={props.autocomplete}
       />
 
-      {
-        isInvalid(props) ? <span>{props.errorMessage || "Enter proper values"}</span>
-        : null
-      }      
+      {isInvalid(props) ? (
+        <span>{props.errorMessage || 'Enter proper values'}</span>
+      ) : null}
     </div>
-  )
+  );
 }

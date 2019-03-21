@@ -1,5 +1,5 @@
-import React from 'react'
-import classes from './MenuToggle.module.css'
+import React from 'react';
+import classes from './MenuToggle.module.css';
 
 const MenuToggle = props => {
   const cls = [
@@ -7,14 +7,9 @@ const MenuToggle = props => {
     'fa',
     props.isOpen ? 'fa-times open' : 'fa-bars',
     props.isOpen ? classes.open : '',
-  ]
-  
-  return (
-    <i
-      className={cls.join(' ')}
-      onClick={props.onToggle}
-    />
-  )
-}
+  ];
+
+  return <i className={cls.join(' ')} onClick={props.onToggle} />;
+};
 
 export default MenuToggle;

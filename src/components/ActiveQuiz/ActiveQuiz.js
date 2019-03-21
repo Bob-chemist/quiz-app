@@ -1,6 +1,6 @@
-import React from 'react'
-import classes from './ActiveQuiz.module.css'
-import AnswersList from './AnswersList/AnswersList'
+import React from 'react';
+import classes from './ActiveQuiz.module.css';
+import AnswersList from './AnswersList/AnswersList';
 
 const ActiveQuiz = props => (
   <div className={classes.ActiveQuiz}>
@@ -9,14 +9,16 @@ const ActiveQuiz = props => (
         <strong>{props.answerNumber}. </strong>
         {props.question}
       </span>
-      <small>{props.answerNumber} of {props.quizLength}</small>
+      <small>
+        {props.answerNumber} of {props.quizLength}
+      </small>
     </p>
-    <AnswersList 
+    <AnswersList
       answers={props.answers}
       onAnswerClick={props.onAnswerClick}
       state={props.state}
     />
   </div>
-)
+);
 
-export default ActiveQuiz
+export default ActiveQuiz;

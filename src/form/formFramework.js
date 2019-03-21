@@ -5,7 +5,7 @@ export function createControl(config, validation) {
     valid: !validation,
     touched: false,
     value: '',
-  }
+  };
 }
 
 export function validate(value, validation = null) {
