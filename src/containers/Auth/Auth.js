@@ -3,10 +3,10 @@ import classes from './Auth.module.sass';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
 import is from 'is_js';
-import Axios from 'axios';
-import { loginToken, registerToken } from './API';
+import { connect } from 'react-redux';
+import { auth } from '../../store/actions/auth';
 
-export default class Auth extends Component {
+class Auth extends Component {
   state = {
     formControls: {
       email: {
@@ -39,38 +39,20 @@ export default class Auth extends Component {
     isFormValid: false,
   };
 
-  loginHandler = async () => {
-    const authData = {
-      email: this.state.formControls.email.value,
-      password: this.state.formControls.password.value,
-      returnSecureToken: true,
-    };
-    try {
-      const response = await Axios.post(
-        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${loginToken}`,
-        authData
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  loginHandler = () => {
+    this.props.auth(
+      this.state.formControls.email.value,
+      this.state.formControls.password.value,
+      true
+    );
   };
 
-  registerHandler = async () => {
-    const authData = {
-      email: this.state.formControls.email.value,
-      password: this.state.formControls.password.value,
-      returnSecureToken: true,
-    };
-    try {
-      const response = await Axios.post(
-        `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${registerToken}`,
-        authData
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  registerHandler = () => {
+    this.props.auth(
+      this.state.formControls.email.value,
+      this.state.formControls.password.value,
+      false
+    );
   };
   submitHandler = event => {
     event.preventDefault();
@@ -160,3 +142,15 @@ export default class Auth extends Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    auth: (email, passwors, isLogin) =>
+      dispatch(auth(email, passwors, isLogin)),
+  };
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Auth);

@@ -11,10 +11,12 @@
   transition: background .3s ease-in-out;
 }
 
-.success {
+.success,
+.success:hover {
   background-color: green;
 }
 
-.error {
+.error,
+.error:hover {
   background-color: red;
 }
