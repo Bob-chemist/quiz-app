@@ -7,7 +7,7 @@ export function auth(email, password, isLogin) {
     const authData = {
       email,
       password,
-      returnSecureTocen: true,
+      returnSecureToken: true,
     };
     let url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${registerToken}`;
     if (isLogin) {
@@ -19,6 +19,7 @@ export function auth(email, password, isLogin) {
     const expirationDate = new Date(
       new Date().getTime() + data.expiresIn * 1000
     );
+
     localStorage.setItem('token', data.idToken);
     localStorage.setItem('userId', data.localId);
     localStorage.setItem('expirationDate', expirationDate);
@@ -47,5 +48,20 @@ export function logout() {
   localStorage.removeItem('expirationDate');
   return {
     type: AUTH_LOGOUT,
+  };
+}
+
+export function autoLogin() {
+  return dispatch => {
+    const token = localStorage.getItem('token');
+    const expirationDate = new Date(localStorage.getItem('expirationDate'));
+    if (!token || expirationDate <= new Date()) {
+      dispatch(logout());
+    } else {
+      dispatch(authSuccess(token));
+      dispatch(
+        autoLogout((expirationDate.getTime() - new Date().getTime()) / 1000)
+      );
+    }
   };
 }

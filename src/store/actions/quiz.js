@@ -14,7 +14,7 @@ export function fetchQuizes() {
   return async dispatch => {
     dispatch(fetchQuizesStart());
     try {
-      const response = await axios.get('/quizes.json');
+      const response = await axios.get('quizes.json');
       const quizes = [];
       Object.keys(response.data).forEach((key, index) => {
         quizes.push({
@@ -84,10 +84,10 @@ export function finishQuiz() {
   };
 }
 
-export function quizNextQuestion(questionNumber) {
+export function quizNextQuestion(number) {
   return {
     type: QUIZ_NEXT_QUESTION,
-    questionNumber,
+    number,
   };
 }
 
