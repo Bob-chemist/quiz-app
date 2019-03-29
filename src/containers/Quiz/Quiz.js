@@ -11,8 +11,6 @@ import {
 } from '../../store/actions/quiz';
 
 class Quiz extends Component {
-  onChooseNewHandler = () => {};
-
   componentDidMount() {
     this.props.fetchQuizById(this.props.match.params.id);
   }
@@ -33,7 +31,6 @@ class Quiz extends Component {
               results={this.props.results}
               quiz={this.props.quiz}
               onRetry={this.props.retryQuiz}
-              onChooseNew={this.onChooseNewHandler}
             />
           ) : (
             <ActiveQuiz
