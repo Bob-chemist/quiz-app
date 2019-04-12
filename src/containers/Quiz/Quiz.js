@@ -49,13 +49,21 @@ class Quiz extends Component {
 }
 
 function mapStateToProps(state) {
+  const {
+    activeQuestion,
+    answerState,
+    isFinished,
+    results,
+    quiz,
+    loading,
+  } = state.quiz;
   return {
-    activeQuestion: state.quiz.activeQuestion,
-    answerState: state.quiz.answerState,
-    isFinished: state.quiz.isFinished,
-    results: state.quiz.results,
-    quiz: state.quiz.quiz,
-    loading: state.quiz.loading,
+    activeQuestion,
+    answerState,
+    isFinished,
+    results,
+    quiz,
+    loading,
   };
 }
 
