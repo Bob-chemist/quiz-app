@@ -11,3 +11,11 @@
   display: flex;
   justify-content: space-between;
 }
+
+.Question > span {
+  padding-right: 20px;
+}
+
+.Question > small {
+  min-width: 35px;
+}

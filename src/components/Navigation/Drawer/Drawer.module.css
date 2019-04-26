@@ -7,14 +7,14 @@
   max-width: 300px;
   padding: 20px 10px;
   box-sizing: border-box;
-  background-color: #fff;
+  background-color: #d2efd9;
   transform: translateX(0px);
-  transition: transform .2s ease-in;
+  transition: transform 0.2s ease-in;
   z-index: 90;
 }
 
 .open {
-  transform: translateX(300px);  
+  transform: translateX(300px);
 }
 
 .Drawer ul {
@@ -31,11 +31,11 @@
   color: cornflowerblue;
   text-decoration: none;
   font-size: 30px;
-  background-color: #fff;
   position: relative;
   padding: 0 20px 10px 20px;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
-.Drawer ul li a:hover, .active {
+.Drawer ul li a:hover,
+.active {
   opacity: 0.7;
 }

@@ -37,7 +37,7 @@ class Drawer extends Component {
       links.push({ to: '/quiz-creator', label: 'Create Quiz', exact: false });
       links.push({ to: '/logout', label: 'Log Out', exact: false });
     } else {
-      links.push({ to: '/auth', label: 'Authentication', exact: false });
+      links.push({ to: '/auth', label: 'Log In', exact: false });
     }
 
     return (
