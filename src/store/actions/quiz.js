@@ -91,6 +91,23 @@ export function quizNextQuestion(number) {
   };
 }
 
+export function timeUp(answerId) {
+  return (dispatch, getState) => {
+    const state = getState().quiz;
+    const question = state.quiz[state.activeQuestion];
+    const results = state.results;
+
+    results[question.id] = 'error';
+    dispatch(quizSetState({ [answerId]: 'error' }, results));
+
+    if (isQuizFinished(state)) {
+      dispatch(finishQuiz());
+    } else {
+      dispatch(quizNextQuestion(state.activeQuestion + 1));
+    }
+  };
+}
+
 export function quizAnswerClick(answerId) {
   return (dispatch, getState) => {
     const state = getState().quiz;

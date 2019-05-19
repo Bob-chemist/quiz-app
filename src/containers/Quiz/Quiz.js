@@ -8,7 +8,9 @@ import {
   fetchQuizById,
   quizAnswerClick,
   retryQuiz,
+  timeUp,
 } from '../../store/actions/quiz';
+import QuizTimer from '../../components/QuizTimer/QuizTimer';
 
 class Quiz extends Component {
   componentDidMount() {
@@ -33,14 +35,20 @@ class Quiz extends Component {
               onRetry={this.props.retryQuiz}
             />
           ) : (
-            <ActiveQuiz
-              question={this.props.quiz[this.props.activeQuestion].question}
-              answers={this.props.quiz[this.props.activeQuestion].answers}
-              onAnswerClick={this.props.quizAnswerClick}
-              quizLength={this.props.quiz.length}
-              answerNumber={this.props.activeQuestion + 1}
-              state={this.props.answerState}
-            />
+            <>
+              <ActiveQuiz
+                question={this.props.quiz[this.props.activeQuestion].question}
+                answers={this.props.quiz[this.props.activeQuestion].answers}
+                onAnswerClick={this.props.quizAnswerClick}
+                quizLength={this.props.quiz.length}
+                answerNumber={this.props.activeQuestion + 1}
+                state={this.props.answerState}
+              />
+              <QuizTimer
+                id={this.props.activeQuestion}
+                timeUp={this.props.timeUp}
+              />
+            </>
           )}
         </div>
       </div>
@@ -72,6 +80,7 @@ function mapDispatchToProps(dispatch) {
     fetchQuizById: id => dispatch(fetchQuizById(id)),
     quizAnswerClick: answerId => dispatch(quizAnswerClick(answerId)),
     retryQuiz: () => dispatch(retryQuiz()),
+    timeUp: answerId => dispatch(timeUp(answerId)),
   };
 }
 
