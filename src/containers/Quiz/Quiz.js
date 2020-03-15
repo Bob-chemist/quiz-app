@@ -4,12 +4,7 @@ import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
 import Loader from '../../components/UI/Loader/Loader';
 import { connect } from 'react-redux';
-import {
-  fetchQuizById,
-  quizAnswerClick,
-  retryQuiz,
-  timeUp,
-} from '../../store/actions/quiz';
+import { retryQuiz } from '../../store/sagas/quizSagas';
 import QuizTimer from '../../components/QuizTimer/QuizTimer';
 
 class Quiz extends Component {
@@ -75,16 +70,20 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchQuizById: id => dispatch(fetchQuizById(id)),
-    quizAnswerClick: answerId => dispatch(quizAnswerClick(answerId)),
-    retryQuiz: () => dispatch(retryQuiz()),
-    timeUp: answerId => dispatch(timeUp(answerId)),
-  };
-}
+const mapDispatchToProps = {
+  fetchQuizById: id => ({
+    type: 'FETCH_BY_ID',
+    payload: id,
+  }),
+  quizAnswerClick: answerId => ({
+    type: 'ANSWER_CLICK',
+    payload: answerId,
+  }),
+  retryQuiz: () => retryQuiz(),
+  timeUp: answerId => ({
+    type: 'TIME_UP',
+    payload: answerId,
+  }),
+};
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Quiz);
+export default connect(mapStateToProps, mapDispatchToProps)(Quiz);

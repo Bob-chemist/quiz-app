@@ -7,7 +7,6 @@ import QuizList from './containers/QuizList/QuizList';
 import QuizCreator from './containers/QuizCreator/QuizCreator';
 import Auth from './containers/Auth/Auth';
 import Logout from './components/Logout/Logout';
-import { autoLogin } from './store/actions/auth';
 
 class App extends Component {
   componentDidMount() {
@@ -46,15 +45,8 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    autoLogin: () => dispatch(autoLogin()),
-  };
-}
+const mapDispatchToProps = {
+  autoLogin: () => ({ type: 'AUTO_LOGIN' }),
+};
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(App)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

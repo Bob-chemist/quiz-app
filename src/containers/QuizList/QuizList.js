@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classes from './QuizList.module.sass';
 import { NavLink } from 'react-router-dom';
-import { fetchQuizes } from '../../store/actions/quiz';
+import { fetchQuizesStart } from '../../store/actions/quiz';
 import Loader from '../../components/UI/Loader/Loader';
 import { connect } from 'react-redux';
 
@@ -17,7 +17,7 @@ class QuizList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchQuizes();
+    this.props.fetchQuizesStart();
   }
 
   render() {
@@ -42,13 +42,8 @@ function mapStateToProps(state) {
     loading: state.quiz.loading,
   };
 }
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchQuizes: () => dispatch(fetchQuizes()),
-  };
-}
+const mapDispatchToProps = {
+  fetchQuizesStart,
+};
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QuizList);
+export default connect(mapStateToProps, mapDispatchToProps)(QuizList);
