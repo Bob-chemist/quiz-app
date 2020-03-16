@@ -4,12 +4,16 @@ import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
 import Loader from '../../components/UI/Loader/Loader';
 import { connect } from 'react-redux';
-import { retryQuiz } from '../../store/sagas/quizSagas';
+import {
+  fetchById,
+  onAnswerClickAction,
+  retryQuiz,
+} from '../../store/sagas/quizSagas';
 import QuizTimer from '../../components/QuizTimer/QuizTimer';
 
 class Quiz extends Component {
   componentDidMount() {
-    this.props.fetchQuizById(this.props.match.params.id);
+    this.props.fetchById(this.props.match.params.id);
   }
   componentWillUnmount() {
     this.props.retryQuiz();
@@ -34,7 +38,7 @@ class Quiz extends Component {
               <ActiveQuiz
                 question={this.props.quiz[this.props.activeQuestion].question}
                 answers={this.props.quiz[this.props.activeQuestion].answers}
-                onAnswerClick={this.props.quizAnswerClick}
+                onAnswerClick={this.props.onAnswerClickAction}
                 quizLength={this.props.quiz.length}
                 answerNumber={this.props.activeQuestion + 1}
                 state={this.props.answerState}
@@ -71,15 +75,9 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  fetchQuizById: id => ({
-    type: 'FETCH_BY_ID',
-    payload: id,
-  }),
-  quizAnswerClick: answerId => ({
-    type: 'ANSWER_CLICK',
-    payload: answerId,
-  }),
-  retryQuiz: () => retryQuiz(),
+  fetchById,
+  onAnswerClickAction,
+  retryQuiz,
   timeUp: answerId => ({
     type: 'TIME_UP',
     payload: answerId,

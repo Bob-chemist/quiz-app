@@ -1,4 +1,11 @@
-import { call, put, takeLatest, takeEvery, select } from 'redux-saga/effects';
+import {
+  call,
+  put,
+  takeLatest,
+  takeEvery,
+  select,
+  delay,
+} from 'redux-saga/effects';
 import axios from '../../axios/axios-quiz';
 import {
   FETCH_QUIZES_START,
@@ -9,10 +16,14 @@ import {
   FINISH_QUIZ,
   QUIZ_NEXT_QUESTION,
   QUIZ_RETRY,
+  FETCH_LIST,
+  FETCH_BY_ID,
+  ON_ANSWER_CLICK,
 } from '../actions/actionTypes';
 
-export function* fetchQiuzes() {
+function* fetchQiuzes() {
   try {
+    yield put({ type: FETCH_QUIZES_START });
     const response = yield call(axios.get, 'quizes.json');
     const quizes = [];
     Object.keys(response.data).forEach((key, index) => {
@@ -27,9 +38,9 @@ export function* fetchQiuzes() {
   }
 }
 
-export function* fetchQuizById(action) {
-  put(FETCH_QUIZES_START);
+function* fetchQuizById(action) {
   try {
+    yield put({ type: FETCH_QUIZES_START });
     const response = yield call(axios.get, `quizes/${action.payload}.json`);
     const quiz = response.data;
 
@@ -39,50 +50,89 @@ export function* fetchQuizById(action) {
   }
 }
 
+function* timeUp(action) {
+  const { quiz } = yield select();
+  const question = quiz.quiz[quiz.activeQuestion];
+  const results = quiz.results;
+
+  results[question.id] = 'error';
+  yield put(quizSetState({ [action.payload]: 'error' }, results));
+
+  if (isQuizFinished(quiz)) {
+    yield put(finishQuiz());
+  } else {
+    yield put(quizNextQuestion(quiz.activeQuestion + 1));
+  }
+}
+
+function* quizAnswerClick({ payload: answerId }) {
+  const { quiz } = yield select();
+
+  if (quiz.answerState) {
+    const key = Object.keys(quiz.answerState)[0];
+    if (quiz.answerState[key] === 'success') {
+      return;
+    }
+  }
+  const question = quiz.quiz[quiz.activeQuestion];
+  const results = quiz.results;
+
+  if (question.rightAnswerId === answerId) {
+    if (!results[question.id]) {
+      results[question.id] = 'success';
+    }
+    yield put(quizSetState({ [answerId]: 'success' }, results));
+    yield delay(1000);
+
+    isQuizFinished(quiz)
+      ? yield put(finishQuiz())
+      : yield put(quizNextQuestion(quiz.activeQuestion + 1));
+  } else {
+    results[question.id] = 'error';
+    yield put(quizSetState({ [answerId]: 'error' }, results));
+  }
+}
+
 function* fetchByIdSaga() {
-  yield takeEvery('FETCH_BY_ID', fetchQuizById);
+  yield takeEvery(FETCH_BY_ID, fetchQuizById);
 }
 
 function* quizSaga() {
-  yield takeLatest(FETCH_QUIZES_START, fetchQiuzes);
+  yield takeLatest(FETCH_LIST, fetchQiuzes);
 }
 
 function* onAnswerClick() {
-  yield takeEvery('ANSWER_CLICK', quizAnswerClick);
+  yield takeEvery(ON_ANSWER_CLICK, quizAnswerClick);
 }
 
 function* timeUpWatcher() {
   yield takeEvery('TIME_UP', timeUp);
 }
 
-function* retry() {
-  yield takeEvery(QUIZ_RETRY, retryQuiz);
-}
+export { quizSaga, fetchByIdSaga, onAnswerClick, timeUpWatcher };
 
-export { quizSaga, fetchByIdSaga, onAnswerClick, retry, timeUpWatcher };
-
-export function fetchQuizSuccess(quiz) {
+function fetchQuizSuccess(quiz) {
   return {
     type: FETCH_QUIZ_SUCCESS,
     quiz,
   };
 }
 
-export function fetchQuizesSuccess(quizes) {
+function fetchQuizesSuccess(quizes) {
   return {
     type: FETCH_QUIZES_SUCCESS,
     quizes,
   };
 }
 
-export function fetchQuizesError(e) {
+function fetchQuizesError(e) {
   return {
     type: FETCH_QUIZES_ERROR,
     error: e,
   };
 }
 
-export function quizSetState(answerState, results) {
+function quizSetState(answerState, results) {
   return {
     type: QUIZ_SET_STATE,
     answerState,
@@ -90,69 +140,35 @@ export function quizSetState(answerState, results) {
   };
 }
 
-export function finishQuiz() {
+function finishQuiz() {
   return {
     type: FINISH_QUIZ,
   };
 }
 
-export function quizNextQuestion(number) {
+function quizNextQuestion(number) {
   return {
     type: QUIZ_NEXT_QUESTION,
     number,
   };
 }
 
-function* timeUp(answerId) {
-  const state = select().quiz;
-  const question = state.quiz[state.activeQuestion];
-  const results = state.results;
-
-  results[question.id] = 'error';
-  yield call(quizSetState, [{ [answerId]: 'error' }, results]);
-
-  if (isQuizFinished(state)) {
-    yield put(finishQuiz());
-  } else {
-    yield call(quizNextQuestion, state.activeQuestion + 1);
-  }
-}
-
-function* quizAnswerClick(answerId) {
-  const state = select().quiz;
-  if (state.answerState) {
-    const key = Object.keys(state.answerState)[0];
-    if (state.answerState[key] === 'success') {
-      return;
-    }
-  }
-  const question = state.quiz[state.activeQuestion];
-  const results = state.results;
-
-  if (question.rightAnswerId === answerId) {
-    if (!results[question.id]) {
-      results[question.id] = 'success';
-    }
-    yield call(quizSetState, [{ [answerId]: 'success' }, results]);
-
-    const timeout = window.setTimeout(function*() {
-      if (isQuizFinished(state)) {
-        yield put(finishQuiz());
-      } else {
-        yield call(quizNextQuestion, state.activeQuestion + 1);
-      }
-      window.clearTimeout(timeout);
-    }, 1000);
-  } else {
-    results[question.id] = 'error';
-    yield call(quizSetState, [{ [answerId]: 'error' }, results]);
-  }
-}
-
 const isQuizFinished = state => state.activeQuestion + 1 === state.quiz.length;
 
-export function retryQuiz() {
-  return {
-    type: QUIZ_RETRY,
-  };
-}
+export const retryQuiz = () => ({
+  type: QUIZ_RETRY,
+});
+
+export const fetchList = () => ({
+  type: FETCH_LIST,
+});
+
+export const fetchById = quizId => ({
+  type: FETCH_BY_ID,
+  payload: quizId,
+});
+
+export const onAnswerClickAction = answerId => ({
+  type: ON_ANSWER_CLICK,
+  payload: answerId,
+});

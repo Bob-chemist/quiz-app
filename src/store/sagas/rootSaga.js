@@ -3,7 +3,6 @@ import {
   quizSaga,
   fetchByIdSaga,
   onAnswerClick,
-  retry,
   timeUpWatcher,
 } from './quizSagas';
 import authSaga from './authSagas';
@@ -14,7 +13,6 @@ export default function* rootSaga() {
     authSaga(),
     fetchByIdSaga(),
     onAnswerClick(),
-    retry(),
     timeUpWatcher(),
   ]);
 }

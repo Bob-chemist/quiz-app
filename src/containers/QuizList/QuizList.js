@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classes from './QuizList.module.sass';
 import { NavLink } from 'react-router-dom';
-import { fetchQuizesStart } from '../../store/actions/quiz';
+import { fetchList } from '../../store/sagas/quizSagas';
 import Loader from '../../components/UI/Loader/Loader';
 import { connect } from 'react-redux';
 
@@ -17,7 +17,7 @@ class QuizList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchQuizesStart();
+    this.props.fetchList();
   }
 
   render() {
@@ -25,7 +25,7 @@ class QuizList extends Component {
       <div className={classes.QuizList}>
         <div>
           <h1>Quiz List</h1>
-          {this.props.loading && this.props.quizes.length !== 0 ? (
+          {this.props.loading || !this.props.quizes.length ? (
             <Loader />
           ) : (
             <ul>{this.renderQuizes()}</ul>
@@ -43,7 +43,7 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = {
-  fetchQuizesStart,
+  fetchList,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuizList);
